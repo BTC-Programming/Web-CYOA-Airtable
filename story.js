@@ -28,12 +28,7 @@ function getScene(record_id) {
       // Once AJAX request returns data, we destructure
       // it and store it in variables.
       let choices = [];
-      let { title, story, delay } = data.fields;
-      // The array of strings is returned as a string by AirTable,
-      // so we need to parse it into an array.
-      if (story.includes("<br><br>")) {
-        story = story.split("<br><br>");
-      }
+      let { title, story} = data.fields;
       // Don't bother if the scene doesn't have any choices.
       if (data.fields.choices) {
         // Collect AirTable queries for every choice into an array.
@@ -48,7 +43,6 @@ function getScene(record_id) {
         Promise.all(choices)
           .then(function (data) {
             let targetArray = [];
-
             for (let idx = 0; idx < data.length; idx++) {
               // Destructure the necessary fields.
               // targets is an array
@@ -56,13 +50,13 @@ function getScene(record_id) {
               targetArray.push({ choice: choice, target: targets[0] });
             }
             setOptions(targetArray);
-            displayStory(story, delay);
+            displayStory(story);
           })
           .catch(function (err) {
             console.log(err);
           });
       } else {
-        displayStory(story, delay);
+        displayStory(story);
         // No options available.
         setOptions({});
       }

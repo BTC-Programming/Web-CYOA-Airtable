@@ -13,7 +13,6 @@ function start() {
     setup();
 }
 
-
 function setup() {
     setOptions([{ choice: "No DB", target: "" }]);
     buttonElement.innerHTML = "What will you do?"; 
@@ -34,34 +33,6 @@ function setOptions(options) {
     }
 }
 
-function displayStory(text, delay = false, append = false) {
-    var currentStoryElement = document.getElementById("currentStory");
-    if (typeof(text) === 'string') {
-        currentStoryElement.innerHTML = text;
-    } 
-	// the following makes text reveal slowly if a delay is indicated in the database
-	else if (delay) {
-        // Disable the button to prevent making a selection before
-        // full message is delivered.
-        buttonElement.disabled = true;
-        // Keep shifting strings from the array until it is empty.
-        if (append) {
-            currentStoryElement.innerHTML += `<br /><br />${text.shift()}`;
-        } 
-		else {
-            currentStoryElement.innerHTML = text.shift();
-        }
-        if (text.length) {
-            setTimeout(function () {
-                displayStory(text, delay, true);
-            }, delay);
-        } 
-		else {
-            // Done. Re-enable button.
-            buttonElement.disabled = false;
-        }
-    } 
-	else {
-        currentStoryElement.innerHTML = text.join('<br /><br />');
-    }
+function displayStory(text) {
+    currentStoryElement.innerHTML = text;
 }
