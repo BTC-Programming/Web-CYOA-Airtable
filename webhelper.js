@@ -1,5 +1,5 @@
+// webhelper.js
 window.onload = start;
-
 var options=[];
 var buttonElement = document.getElementById("button1");
 var currentStoryElement = document.getElementById("currentStory");
@@ -10,15 +10,13 @@ var answer;
 var textTimer;
 
 function start() {
-    setup();
+    getScene(OPENING_SCENE_ID);
 }
 
 function setup() {
     setOptions([{ choice: "No DB", target: "" }]);
     buttonElement.innerHTML = "What will you do?"; 
-    buttonElement.onclick = function () {
-    getScene(dropdown.value);
-    }
+    buttonElement.setAttribute("onclick", "getScene(dropdown.value)");
 }
 
 function setOptions(options) {

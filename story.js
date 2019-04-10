@@ -1,37 +1,25 @@
-// rpg-tollbooth.js
-
-window.onload = start;
+// story.js
 // Change this to match ID in your AirTable.
 const OPENING_SCENE_ID = 'recBB666OcccN7Eet';
-
-function start() {
-    setup();
-	/** CHANGE THE FIRST FUNCTION FOR TESTING **/
-    getScene(OPENING_SCENE_ID);
-}
-
+// Replace with your own AirTable API key.
+const key = 'keyCTEV1rBtpMeDDa';
+// Alter this to match your own AirTable base.
+const base_url = 'appb32htKfdksUMzU'; 
+  
 function getScene(record_id) {
-  // Replace with your own AirTable API key.
-  // Normally, you will want to keep this private.
-  // This key will only be good for a couple of days.
-  const key = 'keyCTEV1rBtpMeDDa';
-  const base_url = 'appb32htKfdksUMzU'; 
-  // Alter this to match your own AirTable base.
-  // URL format is
-  // https://api.airtable.com/v0/<BASE_ID>/<TABLE_NAME>/<RECORD_ID>?api_key=<YOUR_API_KEY>
-  // See airtable.com/api
+  // this requires a record ID when called from setup function
   const url = `https://api.airtable.com/v0/${base_url}/scenes/${record_id}?api_key=${key}`;
-
-  // Make GET request to AirTable base.
+  // Make GET request to AirTable base using the url.
   $.ajax({ url: url, type: 'GET' })
-    .done(function (data) {
+  // Wait for data to be returned. 
+  .done(function (data) {
       // Once AJAX request returns data, we destructure
       // it and store it in variables.
       let choices = [];
-      let { title, story} = data.fields;
+      let {title, story} = data.fields;
       // Don't bother if the scene doesn't have any choices.
       if (data.fields.choices) {
-        // Collect AirTable queries for every choice into an array.
+        // Collect AirTable queries for every choice in scene into an array.
         for (let idx = 0; idx < data.fields.choices.length; idx++) {
           choices.push($.ajax({
             url: `https://api.airtable.com/v0/${base_url}/choices/${data.fields.choices[idx]}?api_key=${key}`,
@@ -49,15 +37,15 @@ function getScene(record_id) {
               let { choice, targets } = data[idx].fields;
               targetArray.push({ choice: choice, target: targets[0] });
             }
-            setOptions(targetArray);
             displayStory(story);
+			setOptions(targetArray);
           })
           .catch(function (err) {
             console.log(err);
           });
       } else {
+		// No options available.
         displayStory(story);
-        // No options available.
         setOptions({});
       }
     })
