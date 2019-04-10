@@ -28,9 +28,18 @@ function getScene(record_id) {
       // Once AJAX request returns data, we destructure
       // it and store it in variables.
       let choices = [];
-      let { title, story} = data.fields;
+      let { title, story, special} = data.fields;
+	  if (data.fields.special) {
+		switch(special) {
+		  case "M8":
+			alert("Play Mastermind!");
+			break;
+		  default:
+			// code block
+		}
+	  }	  
       // Don't bother if the scene doesn't have any choices.
-      if (data.fields.choices) {
+      else if (data.fields.choices) {
         // Collect AirTable queries for every choice into an array.
         for (let idx = 0; idx < data.fields.choices.length; idx++) {
           choices.push($.ajax({
@@ -49,13 +58,14 @@ function getScene(record_id) {
               let { choice, targets } = data[idx].fields;
               targetArray.push({ choice: choice, target: targets[0] });
             }
+			displayStory(story);
             setOptions(targetArray);
-            displayStory(story);
           })
           .catch(function (err) {
             console.log(err);
           });
-      } else {
+      } else // no choices so special
+		{
         displayStory(story);
         // No options available.
         setOptions({});
