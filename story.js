@@ -38,40 +38,40 @@ function getScene(record_id) {
 			// code block
 		}
 	  }	  
-      // Don't bother if the scene doesn't have any choices.
-      else if (data.fields.choices) {
+      	// Don't bother if the scene doesn't have any choices.
+      	else if (data.fields.choices) {
         // Collect AirTable queries for every choice into an array.
-        for (let idx = 0; idx < data.fields.choices.length; idx++) {
-          choices.push($.ajax({
-            url: `https://api.airtable.com/v0/${base_url}/choices/${data.fields.choices[idx]}?api_key=${key}`,
-            type: 'GET'
-          }));
-        }
-        // Use Promise.all() to wait until every query in the array
-        // has been returned before proceeding.
-        Promise.all(choices)
-          .then(function (data) {
-            let targetArray = [];
-            for (let idx = 0; idx < data.length; idx++) {
-              // Destructure the necessary fields.
-              // targets is an array
-              let { choice, targets } = data[idx].fields;
-              targetArray.push({ choice: choice, target: targets[0] });
-            }
-			displayStory(story);
-            setOptions(targetArray);
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
-      } else // no choices so special
-		{
-        displayStory(story);
-        // No options available.
-        setOptions({});
-      }
-    })
-    .fail(function (err) {
-      console.log(err);
-    });
+        	for (let idx = 0; idx < data.fields.choices.length; idx++) {
+          	choices.push($.ajax({
+            	url: `https://api.airtable.com/v0/${base_url}/choices/${data.fields.choices[idx]}?api_key=${key}`,
+            	type: 'GET'
+          	}));
+        	}
+        	// Use Promise.all() to wait until every query in the array
+        	// has been returned before proceeding.
+        	Promise.all(choices)
+          	.then(function (data) {
+            		let targetArray = [];
+            		for (let idx = 0; idx < data.length; idx++) {
+              		// Destructure the necessary fields.
+              		// targets is an array
+              		let { choice, targets } = data[idx].fields;
+              		targetArray.push({ choice: choice, target: targets[0] });
+            	}
+	    	displayStory(story);
+            	setOptions(targetArray);
+          	})
+          	.catch(function (err) {
+            	console.log(err);
+          	});
+     	} 
+	else {
+        	displayStory(story);
+        	// No options available.
+        	setOptions({});
+      	}
+   })
+   .fail(function (err) {
+   console.log(err);
+   });
 }
